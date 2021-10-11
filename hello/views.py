@@ -256,7 +256,7 @@ def receive_number(message):
             if message.text == settings.SECRET:
                 last_action.status = "completed"
                 last_action.save()
-                bot.send_message(message.chat.id, "Теперь вы можете пользоваться услугами. Для помощи введите команду <a>/help<a>", parse_mode="html")
+                bot.send_message(message.chat.id, "Теперь вы можете пользоваться услугами. Для помощи введите команду <a>/help</a>", parse_mode="html")
             else:
                 bot.reply_to(message, "Ключ неверный! Повторите попытку снова")
             return
