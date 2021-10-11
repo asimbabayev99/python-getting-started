@@ -235,7 +235,7 @@ def normalize_keywords(keywords):
 def receive_number(message):
     last_action = Action.objects.filter(chat_id=message.chat.id).order_by('-id').first()
     if last_action:
-        if last_action.name == "upload_keywords" and last_action.status is not "completed":
+        if last_action.name == "upload_keywords" and last_action.status != "completed":
             Keyword.objects.filter(chat_id=message.chat.id).delete()
             keywords = message.text.split(",")
             keywords = normalize_keywords(keywords)
@@ -252,9 +252,9 @@ def receive_number(message):
             action.status == "completed"
             action.save()
             return
-        elif last_action.name == "enter_password" and last_action.status is not "completed":
+        elif last_action.name == "enter_password" and last_action.status != "completed":
             if message.text == settings.SECRET:
-                Chat.objects.filter(id==message.chat.id).delete()
+                Chat.objects.filter(id=message.chat.id).delete()
                 new_chat = Chat(
                     id=message.chat.id, 
                     username=message.from_user.username, 
