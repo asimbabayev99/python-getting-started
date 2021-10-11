@@ -313,5 +313,6 @@ def callback_inline(call):
         print(repr(e))
 
 # Webhook
-# bot.remove_webhook()
-# bot.set_webhook(url="https://infinite-cove-65953.herokuapp.com/bot")
+# bot.set_webhook()
+# bot.set_webhook(url="https://infinite-cove-65953.herokuapp.com/" + settings.TOKEN)
+# print("webhook is set")
