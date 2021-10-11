@@ -43,10 +43,10 @@ class UpdateBot(APIView):
     def post(self, request):
         # Сюда должны получать сообщения от телеграм и далее обрабатываться ботом
         print("I am here")
-        # json_str = request.body.decode('UTF-8')
-        # print(json_str)
-        # update = types.Update.de_json(json_str)
-        # bot.process_new_updates([update])
+        json_str = request.body.decode('UTF-8')
+        print(json_str)
+        update = types.Update.de_json(json_str)
+        bot.process_new_updates([update])
  
         return Response({'code': 200})
 
