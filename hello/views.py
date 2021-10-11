@@ -43,10 +43,10 @@ class UpdateBot(APIView):
     def post(self, request):
         # Сюда должны получать сообщения от телеграм и далее обрабатываться ботом
         print("I am here")
-        json_str = request.body.decode('UTF-8')
-        print(json_str)
-        update = types.Update.de_json(json_str)
-        bot.process_new_updates([update])
+        # json_str = request.body.decode('UTF-8')
+        # print(json_str)
+        # update = types.Update.de_json(json_str)
+        # bot.process_new_updates([update])
  
         return Response({'code': 200})
 
@@ -126,7 +126,7 @@ def receive_document(message):
     }
 
     new_action = Action(
-        chat=message.chat.id,
+        chat_id=message.chat.id,
         name='upload_file',
         detail=json.dumps(data)
     )
@@ -144,7 +144,7 @@ def receive_document(message):
         bot.send_message(message.chat.id, 'Хотите использовать последний список имен? ' + ", ".join(keywords), reply_markup=markup)
     else:
         new_action = Action(
-            chat=message.chat.id,
+            chat_id=message.chat.id,
             name='upload_keywords'
         ).save()
         bot.send_message(message.chat.id, 'Введит список имен через запятую:')
@@ -241,8 +241,8 @@ def receive_number(message):
             keywords = message.text.split(",")
             keywords = normalize_keywords(keywords)
             for i in keywords:
-                new_keyword= Keyword(
-                    chat=message.chat.id,
+                Keyword(
+                    chat_id=message.chat.id,
                     name=i
                 ).save()
             last_action.status = "completed"
@@ -302,8 +302,8 @@ def callback_inline(call):
                 action.save()
             else:
                 bot.edit_message_text(chat_id=call.message.chat.id, message_id=call.message.message_id, text="Введит список имен через запятую", reply_markup=None)
-                new_action = Action(
-                    chat=call.message.chat.id,
+                Action(
+                    chat_id=call.message.chat.id,
                     name='upload_keywords'
                 ).save()
 
