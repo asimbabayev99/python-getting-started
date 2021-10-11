@@ -55,12 +55,12 @@ def welcome(message):
     Chat.objects.filter(id=message.chat.id).delete()
     # Action.objects.filter(chat_id=message.chat.id).delete()
     # Keyword.objects.filter(chat_id=message.chat.id).delete()
-    # Chat.objects.create(
-    #     id=message.chat.id,
-    #     username=message.from_user.username, 
-    #     first_name=message.from_user.first_name, 
-    #     last_name=message.from_user.last_name
-    # )
+    Chat.objects.create(
+        id=message.chat.id,
+        username=message.from_user.username, 
+        first_name=message.from_user.first_name, 
+        last_name=message.from_user.last_name
+    )
     new_action = Action(
         chat_id=message.chat.id,
         name='enter_password',
@@ -254,13 +254,6 @@ def receive_number(message):
             return
         elif last_action.name == "enter_password" and last_action.status != "completed":
             if message.text == settings.SECRET:
-                Chat.objects.filter(id=message.chat.id).delete()
-                Chat.objects.create(
-                    id=message.chat.id, 
-                    username=message.from_user.username, 
-                    first_name=message.from_user.first_name, 
-                    last_name=message.from_user.last_name
-                )
                 last_action.status = "completed"
                 last_action.save()
                 bot.send_message(message.chat.id, "Теперь вы можете пользоваться услугами. Для помощи введите команду <a>/help<a>", parse_mode="html")
