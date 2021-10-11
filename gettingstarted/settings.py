@@ -112,6 +112,8 @@ USE_TZ = True
 
 
 TOKEN = "2036646861:AAFBDD4nmLqUB38zZ2pksp2bOpE9k536Kqs"
+REQUEST_PAUSE = 0.2
+SECRET = "1234554321"
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/

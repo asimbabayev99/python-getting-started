@@ -4,3 +4,6 @@ gunicorn
 django-heroku
 pyTelegramBotAPI==4.1.0
 requests==2.26.0
+pandas
+beautifulsoup4
+lxml
