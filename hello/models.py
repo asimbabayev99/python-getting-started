@@ -30,7 +30,7 @@ class Action(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, null=False, blank=False)
     name = models.CharField(max_length=32, choices=ACTION_NAMES)
     status = models.CharField(max_length=32, choices=ACTION_STATUSES, default="pending")
-    detail = models.CharField(max_length=32, null=True, blank=True)
+    detail = models.CharField(max_length=1024, null=True, blank=True)
 
 
 

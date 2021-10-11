@@ -85,7 +85,7 @@ def welcome(message):
 
 @bot.message_handler(commands=['terminate'])
 def terminate(message):
-    Action.objects.filter(chat_id=message.chat.id).update(status="canceled")
+    Action.objects.filter(chat_id=message.chat.id).exclude(status="completed").update(status="canceled")
     bot.send_message(message.chat.id, "jobs terminated")
     
 
