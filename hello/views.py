@@ -43,6 +43,7 @@ class UpdateBot(APIView):
     def post(self, request):
         # Сюда должны получать сообщения от телеграм и далее обрабатываться ботом
         json_str = request.body.decode('UTF-8')
+        print(json_str)
         update = types.Update.de_json(json_str)
         bot.process_new_updates([update])
  
@@ -52,19 +53,19 @@ class UpdateBot(APIView):
 
 @bot.message_handler(commands=['start', 'reset'])
 def welcome(message):
-    Chat.objects.filter(id=message.chat.id).delete()
-    # Action.objects.filter(chat_id=message.chat.id).delete()
-    # Keyword.objects.filter(chat_id=message.chat.id).delete()
-    Chat(
-        id=message.chat.id,
-        username=message.from_user.username, 
-        first_name=message.from_user.first_name, 
-        last_name=message.from_user.last_name
-    ).save()
-    Action(
-        chat_id=message.chat.id,
-        name='enter_password',
-    ).save()
+    # Chat.objects.filter(id=message.chat.id).delete()
+    # # Action.objects.filter(chat_id=message.chat.id).delete()
+    # # Keyword.objects.filter(chat_id=message.chat.id).delete()
+    # Chat(
+    #     id=message.chat.id,
+    #     username=message.from_user.username, 
+    #     first_name=message.from_user.first_name, 
+    #     last_name=message.from_user.last_name
+    # ).save()
+    # Action(
+    #     chat_id=message.chat.id,
+    #     name='enter_password',
+    # ).save()
 
     text = "<b>Добро пожаловать, {0.first_name}!</b>\n".format(message.from_user)
     text += "Я - <b>{0.first_name}</b>, бот созданный для поиска контаков. Для использования данных услуг введите <b>ключ:</b>".format(bot.get_me())
@@ -313,5 +314,5 @@ def callback_inline(call):
 
 # Webhook
 # bot.set_webhook()
-# bot.set_webhook(url="https://infinite-cove-65953.herokuapp.com/" + settings.TOKEN)
+bot.set_webhook(url="https://infinite-cove-65953.herokuapp.com/" + settings.TOKEN)
 # print("webhook is set")
