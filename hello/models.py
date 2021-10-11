@@ -3,9 +3,9 @@ from django.db import models
 # Create your models here.
 class Chat(models.Model):
     id = models.IntegerField(primary_key=True)
-    username = models.CharField(max_length=256)
-    first_name = models.CharField(max_length=256)
-    last_name = models.CharField(max_length=256)
+    username = models.CharField(max_length=256, null=True, blank=True)
+    first_name = models.CharField(max_length=256, null=True, blank=True)
+    last_name = models.CharField(max_length=256, null=True, blank=True)
 
     def __str__(self):
         return str(self.id) + "-" + self.username
