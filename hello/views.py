@@ -68,7 +68,7 @@ def welcome(message):
     new_action.save()
 
     text = "<b>Добро пожаловать, {0.first_name}!\n".format(message.from_user)
-    text += "Я - <b>{1.first_name}</b>, бот созданный для поиска контаков. Для использования данных услуг введите <b>ключ:<b>".format(bot.get_me())
+    text += "Я - <b>{0.first_name}</b>, бот созданный для поиска контаков. Для использования данных услуг введите <b>ключ:<b>".format(bot.get_me())
     bot.send_message(message.chat.id, text, parse_mode='html')
 
 
