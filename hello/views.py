@@ -125,12 +125,11 @@ def receive_document(message):
         'filepath': file.file_path,
     }
 
-    new_action = Action(
+    Action(
         chat_id=message.chat.id,
         name='upload_file',
         detail=json.dumps(data)
-    )
-    new_action.save()
+    ).save()
 
 
     keywords = Keyword.objects.filter(chat_id=message.chat.id).all()
@@ -143,7 +142,7 @@ def receive_document(message):
         markup.add(item1, item2)
         bot.send_message(message.chat.id, 'Хотите использовать последний список имен? ' + ", ".join(keywords), reply_markup=markup)
     else:
-        new_action = Action(
+        Action(
             chat_id=message.chat.id,
             name='upload_keywords'
         ).save()
@@ -235,11 +234,13 @@ def normalize_keywords(keywords):
 @bot.message_handler(content_types=['text'])
 def receive_number(message):
     last_action = Action.objects.filter(chat_id=message.chat.id).order_by('-id').first()
+    print(last_action)
     if last_action:
         if last_action.name == "upload_keywords" and last_action.status != "completed":
             Keyword.objects.filter(chat_id=message.chat.id).delete()
             keywords = message.text.split(",")
             keywords = normalize_keywords(keywords)
+            print(keywords)
             for i in keywords:
                 Keyword(
                     chat_id=message.chat.id,
@@ -265,6 +266,7 @@ def receive_number(message):
        
     try:
         last_action = Action.objects.filter(chat_id=message.chat.id).order_by('-id').first()
+        print("last_action = ", last_action)
         if last_action and last_action.status != 'completed':
             bot.send_message("wait for job to complete. In order to cancel running jobs enter <a>/terminate</a> command.", parse_mode="html")
             return
@@ -294,7 +296,7 @@ def callback_inline(call):
             if call.data == 'yes':
                 keywords = Keyword.objects.filter(chat_id=call.message.chat.id).all()
                 keywords = [i.name for i in keywords]
-                action = Action.filter(chat_id=call.message.chat.id, name="upload_file").order_by('-id').first()
+                action = Action.objects.filter(chat_id=call.message.chat.id, name="upload_file").order_by('-id').first()
                 bot.delete_message(call.message.chat.id, call.message.message_id)
                 print(action)
                 check_numbers(message=call.message, action=action)
