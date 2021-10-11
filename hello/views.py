@@ -53,4 +53,4 @@ def start_message(message):
 
 # Webhook
 bot.remove_webhook()
-bot.set_webhook(url="https://infinite-cove-65953.herokuapp.com/" + TOKEN)
+bot.set_webhook(url="https://infinite-cove-65953.herokuapp.com/" + settings.TOKEN)
