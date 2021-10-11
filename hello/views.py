@@ -112,7 +112,7 @@ def receive_document(message):
         bot.send_message(message.chat.id, "<b>Введите ключ:</b>", parse_mode="html")
         return  
     elif last_action and last_action.status != "completed":
-        bot.send_message(message.chat.id, "Подождите завершения действий. Для отмены последних действий введите команду <a>/terminate<a>", parse_mode="html")
+        bot.send_message(message.chat.id, "Подождите завершения действий. Для отмены последних действий введите команду <a>/terminate</a>", parse_mode="html")
         return
 
     fileID = message.document.file_id
