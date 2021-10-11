@@ -55,6 +55,12 @@ def welcome(message):
     Chat.objects.filter(id=message.chat.id).delete()
     # Action.objects.filter(chat_id=message.chat.id).delete()
     # Keyword.objects.filter(chat_id=message.chat.id).delete()
+    Chat.objects.create(
+        id=message.chat.id,
+        username=message.from_user.username, 
+        first_name=message.from_user.first_name, 
+        last_name=message.from_user.last_name
+    )
     new_action = Action(
         chat_id=message.chat.id,
         name='enter_password',
