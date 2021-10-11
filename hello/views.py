@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
-
+from django.conf import settings
 from .models import Greeting
 
 import requests
@@ -12,8 +12,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
  
 
-TOKEN = "2036646861:AAFBDD4nmLqUB38zZ2pksp2bOpE9k536Kqs"
-bot = TeleBot(TOKEN)
+bot = TeleBot(settings.TOKEN, threaded=False)
 
 
 
@@ -25,6 +24,9 @@ def index(request):
 
  
 class UpdateBot(APIView):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse("Бот запусчен и работает.")
+
     def post(self, request):
         # Сюда должны получать сообщения от телеграм и далее обрабатываться ботом
         json_str = request.body.decode('UTF-8')
@@ -50,4 +52,5 @@ def start_message(message):
 
 
 # Webhook
+bot.remove_webhook()
 bot.set_webhook(url="https://infinite-cove-65953.herokuapp.com/" + TOKEN)
