@@ -39,6 +39,8 @@ class UpdateBot(APIView):
  
 @bot.message_handler(commands=['start'])
 def start_message(message):
+    print("-"*50)
+    print(message)
     # User написал /start в диалоге с ботом
     text = '<b>Настройка бота!</b>\n\n'
     text += 'Чтобы пначать использовать бата и настроить его по Вашим предпочтениям ответьте на следующие вопросы.\n\n'
