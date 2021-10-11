@@ -55,17 +55,16 @@ def welcome(message):
     Chat.objects.filter(id=message.chat.id).delete()
     # Action.objects.filter(chat_id=message.chat.id).delete()
     # Keyword.objects.filter(chat_id=message.chat.id).delete()
-    Chat.objects.create(
+    Chat(
         id=message.chat.id,
         username=message.from_user.username, 
         first_name=message.from_user.first_name, 
         last_name=message.from_user.last_name
-    )
-    new_action = Action(
+    ).save()
+    Action(
         chat_id=message.chat.id,
         name='enter_password',
-    )
-    new_action.save()
+    ).save()
 
     text = "<b>Добро пожаловать, {0.first_name}!</b>\n".format(message.from_user)
     text += "Я - <b>{0.first_name}</b>, бот созданный для поиска контаков. Для использования данных услуг введите <b>ключ:</b>".format(bot.get_me())
