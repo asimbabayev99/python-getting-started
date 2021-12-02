@@ -10,6 +10,7 @@ from django.views import View
 import pandas as pd
 import time
 import uuid
+from datetime import datetime
 
 from telebot import TeleBot, types
 from rest_framework.response import Response
@@ -173,9 +174,9 @@ def check_numbers(message, action):
 
     result = {}
     msg = bot.send_message(message.chat.id, get_progress_bar(0, total_rows))
-    # print(msg)
     
     result_filename = uuid.uuid4().hex + ".txt"
+    last_update = datetime.now()
     with(open(result_filename, 'w', encoding='utf-8')) as f:
         for i, row in read_file.iterrows():
             print(row['Telefon nömrəsi'])
@@ -184,7 +185,9 @@ def check_numbers(message, action):
                 bot.delete_message(message.chat.id, msg.message_id)
                 return
             try:
-                bot.edit_message_text(chat_id=message.chat.id, text=get_progress_bar(i, total_rows), message_id=msg.message_id)
+                if (datetime.now() - last_update).total_seconds >= 1:
+                    bot.edit_message_text(chat_id=message.chat.id, text=get_progress_bar(i, total_rows), message_id=msg.message_id)
+                    
                 response = session.get("https://webmobcontact.nunu-app.xyz/result?n={0}&f=1".format(row['Telefon nömrəsi']))
                 tree = lxml.html.fromstring(response.text)
                 user_name = tree.xpath("//*[@id='content']/div/div/div/div[1]/div[1]/div[2]/h1")[0].text_content()
