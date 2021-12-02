@@ -227,8 +227,7 @@ def check_numbers(message, action):
     else:
         bot.send_message(message.chat.id, "Ничего не найдено")
         with(open(result_filename, 'rb')) as f:
-            if f.read():
-                bot.send_document(message.chat.id, f)
+            bot.send_document(message.chat.id, f)
 
 
 
