@@ -129,7 +129,8 @@ def receive_document(message):
     Action(
         chat_id=message.chat.id,
         name='upload_file',
-        detail=json.dumps(data)
+        detail=json.dumps(data),
+        status='completed'
     ).save()
 
 
@@ -175,7 +176,7 @@ def check_numbers(message, action):
     # print(msg)
     
     result_filename = uuid.uuid4().hex + ".txt"
-    with(open(result_filename, 'w')) as f:
+    with(open(result_filename, 'w', encoding='utf-8')) as f:
         for i, row in read_file.iterrows():
             print(row['Telefon nömrəsi'])
             last_action = Action.objects.filter(chat_id=message.chat.id).order_by('-id').first()
@@ -213,10 +214,10 @@ def check_numbers(message, action):
         time.sleep(settings.REQUEST_PAUSE)
 
     # print(result)
-    result = [str(key) + '\n' + str(value) for key, value in result.items()]
+    result = ["*" + str(key) + "*" + '\n' + str(value) for key, value in result.items()]
     bot.delete_message(message.chat.id, msg.message_id)
     if result:
-        bot.send_message(message.chat.id, "\n".join(result))
+        bot.send_message(chat_id=message.chat.id, text="\n".join(result), parse_mode="markdown")
         with(open(result_filename, 'rb')) as f:
             bot.send_document(message.chat.id, f)
     else:
