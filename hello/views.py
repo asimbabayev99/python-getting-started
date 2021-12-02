@@ -173,7 +173,7 @@ def check_numbers(message, action):
     msg = bot.send_message(message.chat.id, get_progress_bar(0, total_rows))
     # print(msg)
     
-    with(open(data['filepath'].replace(ext, ".txt"), 'r')) as f:
+    with(open(data['filepath'].replace(ext, ".txt"), 'w')) as f:
         for i, row in read_file.iterrows():
             print(row['Telefon nömrəsi'])
             last_action = Action.objects.filter(chat_id=message.chat.id).order_by('-id').first()
