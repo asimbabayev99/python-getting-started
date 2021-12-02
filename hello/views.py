@@ -11,6 +11,7 @@ import pandas as pd
 import time
 import uuid
 from datetime import datetime
+import os 
 
 from telebot import TeleBot, types
 from rest_framework.response import Response
@@ -228,7 +229,8 @@ def check_numbers(message, action):
         bot.send_message(message.chat.id, "Ничего не найдено")
         with(open(result_filename, 'rb')) as f:
             bot.send_document(message.chat.id, f)
-
+    os.remove(result_filename)
+    print(result_filename + " deleted")
 
 
 
