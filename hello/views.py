@@ -198,7 +198,7 @@ def check_numbers(message, action):
                 for tag in tags:
                     user_name = tag.text_content()
                     names.append(user_name)
-                f.write(str(row['Telefon nömrəsi']) + " " + str(names))
+                f.write(str(row['Telefon nömrəsi']) + " " + str(names) + "\n")
 
                 contains = False
                 for name in names:
