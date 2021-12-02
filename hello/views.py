@@ -172,39 +172,41 @@ def check_numbers(message, action):
     result = {}
     msg = bot.send_message(message.chat.id, get_progress_bar(0, total_rows))
     # print(msg)
+    
+    with(open(data['filepath'].replace(ext, ".txt"), 'r')) as f:
+        for i, row in read_file.iterrows():
+            print(row['Telefon nömrəsi'])
+            last_action = Action.objects.filter(chat_id=message.chat.id).order_by('-id').first()
+            if not last_action or last_action.status == "canceled":
+                bot.delete_message(message.chat.id, msg.message_id)
+                return
+            try:
+                bot.edit_message_text(chat_id=message.chat.id, text=get_progress_bar(i, total_rows), message_id=msg.message_id)
+                response = session.get("https://webmobcontact.nunu-app.xyz/result?n={0}&f=1".format(row['Telefon nömrəsi']))
+                tree = lxml.html.fromstring(response.text)
+                user_name = tree.xpath("//*[@id='content']/div/div/div/div[1]/div[1]/div[2]/h1")[0].text_content()
+                names = [user_name, ]
 
-    for i, row in read_file.iterrows():
-        print(row['Telefon nömrəsi'])
-        last_action = Action.objects.filter(chat_id=message.chat.id).order_by('-id').first()
-        if not last_action or last_action.status == "canceled":
-            bot.delete_message(message.chat.id, msg.message_id)
-            return
-        try:
-            bot.edit_message_text(chat_id=message.chat.id, text=get_progress_bar(i, total_rows), message_id=msg.message_id)
-            response = session.get("https://webmobcontact.nunu-app.xyz/result?n={0}&f=1".format(row['Telefon nömrəsi']))
-            tree = lxml.html.fromstring(response.text)
-            user_name = tree.xpath("//*[@id='content']/div/div/div/div[1]/div[1]/div[2]/h1")[0].text_content()
-            names = [user_name, ]
+                tags = tree.xpath("//*[@id='tagList']/span")
+                for tag in tags:
+                    user_name = tag.text_content()
+                    names.append(user_name)
+                f.write(row['Telefon nömrəsi'] + " " + str(names))
 
-            tags = tree.xpath("//*[@id='tagList']/span")
-            for tag in tags:
-                user_name = tag.text_content()
-                names.append(user_name)
-
-            contains = False
-            for name in names:
-                for key in keywords:
-                    if name.lower().find(key) >= 0:
-                        print(row['Telefon nömrəsi'], names)
-                        result.update({
-                            row['Telefon nömrəsi'] : names
-                        })
-                        contains = True
+                contains = False
+                for name in names:
+                    for key in keywords:
+                        if name.lower().find(key) >= 0:
+                            print(row['Telefon nömrəsi'], names)
+                            result.update({
+                                row['Telefon nömrəsi'] : names
+                            })
+                            contains = True
+                            break
+                    if contains:
                         break
-                if contains:
-                    break
-        except Exception as e:
-            print(e)
+            except Exception as e:
+                print(e)
         
         time.sleep(settings.REQUEST_PAUSE)
 
@@ -213,6 +215,8 @@ def check_numbers(message, action):
     bot.delete_message(message.chat.id, msg.message_id)
     if result:
         bot.send_message(message.chat.id, "\n".join(result))
+        with(open(data['filepath'].replace(ext, ".txt"), 'rb')) as f:
+            bot.send_document(message.chat.id, f)
     else:
         bot.send_message(message.chat.id, "Ничего не найдено")
 
