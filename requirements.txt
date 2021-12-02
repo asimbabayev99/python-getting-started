@@ -8,3 +8,4 @@ pandas
 beautifulsoup4
 lxml
 xlrd
+psycopg2-binary==2.8.6
