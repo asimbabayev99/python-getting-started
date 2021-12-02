@@ -9,6 +9,7 @@ from django.http import JsonResponse
 from django.views import View
 import pandas as pd
 import time
+import uuid
 
 from telebot import TeleBot, types
 from rest_framework.response import Response
@@ -173,7 +174,8 @@ def check_numbers(message, action):
     msg = bot.send_message(message.chat.id, get_progress_bar(0, total_rows))
     # print(msg)
     
-    with(open(data['filepath'].replace(ext, ".txt"), 'w')) as f:
+    result_filename = uuid.uuid4().hex + ".txt"
+    with(open(result_filename, 'w')) as f:
         for i, row in read_file.iterrows():
             print(row['Telefon nömrəsi'])
             last_action = Action.objects.filter(chat_id=message.chat.id).order_by('-id').first()
@@ -215,7 +217,7 @@ def check_numbers(message, action):
     bot.delete_message(message.chat.id, msg.message_id)
     if result:
         bot.send_message(message.chat.id, "\n".join(result))
-        with(open(data['filepath'].replace(ext, ".txt"), 'rb')) as f:
+        with(open(result_filename, 'rb')) as f:
             bot.send_document(message.chat.id, f)
     else:
         bot.send_message(message.chat.id, "Ничего не найдено")
