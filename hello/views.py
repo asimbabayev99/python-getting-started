@@ -185,9 +185,9 @@ def check_numbers(message, action):
                 bot.delete_message(message.chat.id, msg.message_id)
                 return
             try:
-                if (datetime.now() - last_update).total_seconds >= 1:
+                if (datetime.now() - last_update).total_seconds() >= 1:
                     bot.edit_message_text(chat_id=message.chat.id, text=get_progress_bar(i, total_rows), message_id=msg.message_id)
-                    
+
                 response = session.get("https://webmobcontact.nunu-app.xyz/result?n={0}&f=1".format(row['Telefon nömrəsi']))
                 tree = lxml.html.fromstring(response.text)
                 user_name = tree.xpath("//*[@id='content']/div/div/div/div[1]/div[1]/div[2]/h1")[0].text_content()
