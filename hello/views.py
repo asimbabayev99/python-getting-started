@@ -193,7 +193,7 @@ def check_numbers(message, action):
                 for tag in tags:
                     user_name = tag.text_content()
                     names.append(user_name)
-                f.write(row['Telefon nömrəsi'] + " " + str(names))
+                f.write(str(row['Telefon nömrəsi']) + " " + str(names))
 
                 contains = False
                 for name in names:
@@ -221,6 +221,9 @@ def check_numbers(message, action):
             bot.send_document(message.chat.id, f)
     else:
         bot.send_message(message.chat.id, "Ничего не найдено")
+        with(open(result_filename, 'rb')) as f:
+            if f.read():
+                bot.send_document(message.chat.id, f)
 
 
 
