@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Action, Keyword, Chat
+from hello.models import Action, Keyword, Chat
 # Register your models here.
 
 admin.site.register(Action)
