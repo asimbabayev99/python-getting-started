@@ -186,6 +186,7 @@ def check_numbers(message, action):
                 return
             try:
                 if (datetime.now() - last_update).total_seconds() >= 1:
+                    last_update = datetime.now()
                     bot.edit_message_text(chat_id=message.chat.id, text=get_progress_bar(i, total_rows), message_id=msg.message_id)
 
                 response = session.get("https://webmobcontact.nunu-app.xyz/result?n={0}&f=1".format(row['Telefon nömrəsi']))
